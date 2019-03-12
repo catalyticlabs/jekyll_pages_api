@@ -48,6 +48,20 @@ module JekyllPagesApi
       self.filterer.text_only(output)
     end
 
+    def markdown_text
+      path = self.page.path
+      fileContent = File.read(path)
+
+      # determines if markdown content has a title block
+      hasTitle = fileContent.start_with?('---')
+      if hasTitle
+        # if title block is present, take all content afterwards
+        fileContent = fileContent.split('---')[2]
+      end
+
+      fileContent.strip
+    end
+
     def tags
       (self.page.data['tags'] if self.page.respond_to?(:data)) || []
     end
@@ -65,7 +79,9 @@ module JekyllPagesApi
         url: self.url,
         tags: self.tags,
         body: self.body_text,
-        meta: self.page.data
+        meta: self.page.data,
+        path: self.page.path,
+        markdown: self.markdown_text
       })
     end
   end
