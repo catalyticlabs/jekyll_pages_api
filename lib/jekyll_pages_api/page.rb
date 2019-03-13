@@ -62,6 +62,12 @@ module JekyllPagesApi
       fileContent.strip
     end
 
+    def relative_path
+      directory = Pathname.new('.')
+      path = Pathname.new(self.page.path)
+      (self.page.path if path.relative?) || path.relative_path_from(Pathname.new(Dir.pwd))
+    end
+
     def tags
       (self.page.data['tags'] if self.page.respond_to?(:data)) || []
     end
@@ -80,7 +86,7 @@ module JekyllPagesApi
         tags: self.tags,
         body: self.body_text,
         meta: self.page.data,
-        path: self.page.path,
+        path: self.relative_path,
         markdown: self.markdown_text
       })
     end
