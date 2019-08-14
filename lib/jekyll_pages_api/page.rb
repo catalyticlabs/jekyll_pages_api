@@ -56,7 +56,8 @@ module JekyllPagesApi
       hasTitle = fileContent.start_with?('---')
       if hasTitle
         # if title block is present, take all content afterwards
-        fileContent = fileContent.split('---')[2]
+        splitContent = fileContent.split('---')
+        fileContent = splitContent.slice(2, splitContent.length).join('---')
       end
 
       fileContent.strip
