@@ -60,7 +60,8 @@ module JekyllPagesApi
         fileContent = splitContent.slice(2, splitContent.length).join('---')
       end
 
-      fileContent.strip
+      # remove all liquid tags since we don't want them to render in the web app
+      fileContent.gsub(/{%.+?%}/, '').strip;
     end
 
     def relative_path
